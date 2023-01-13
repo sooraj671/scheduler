@@ -15,13 +15,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.9.0"
-  awesome_notifications:
-    dependency: "direct main"
-    description:
-      name: awesome_notifications
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.7.4+1"
   boolean_selector:
     dependency: transitive
     description:
@@ -165,13 +158,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_timeline:
-    dependency: "direct main"
-    description:
-      name: flutter_timeline
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -413,20 +399,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.12"
-  timeline_tile:
-    dependency: "direct main"
-    description:
-      name: timeline_tile
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
-  timelines:
-    dependency: "direct main"
-    description:
-      name: timelines
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.0"
   timezone:
     dependency: transitive
     description:

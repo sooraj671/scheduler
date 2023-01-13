@@ -5,13 +5,11 @@ import 'package:scheduler/services/theme_services.dart';
 import 'package:scheduler/ui/home_page.dart';
 import 'package:scheduler/ui/theme.dart';
 import 'db/db_helper.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DBHelper.initDb();
   await GetStorage.init();
-  
   runApp(const MyApp());
 }
 

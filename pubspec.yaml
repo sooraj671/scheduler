@@ -47,10 +47,6 @@ dependencies:
   sqflite:
   flutter_staggered_animations:
   flutter_colorpicker: ^1.0.3
-  flutter_timeline: ^0.3.0
-  timeline_tile: ^2.0.0
-  timelines: ^0.1.0
-  awesome_notifications: ^0.7.4+1
 dev_dependencies:
   flutter_test:
     sdk: flutter
