@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(
             height: 20,
           ),
-          _showTasks(),
+          _showTasks()
         ],
       ),
     );
@@ -95,63 +95,180 @@ class _HomePageState extends State<HomePage> {
   }
 
   _showBottomSheet(BuildContext context, Task task) {
-    Get.bottomSheet(
-      Container(
-          padding: const EdgeInsets.only(
-            top: 4,
-          ),
-          height: task.isCompleted == 1
-              ? MediaQuery.of(context).size.height * 0.24
-              : MediaQuery.of(context).size.height * 0.32,
-          color: Get.isDarkMode ? darkGreyClr : Colors.white,
-          child: Column(
-            children: [
-              Container(
-                  height: 6,
-                  width: 120,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Get.isDarkMode
-                          ? Colors.grey[600]
-                          : Colors.grey[300])),
-              Spacer(),
-              task.isCompleted == 1
-                  ? Container()
-                  : _bottomSheetButton(
-                      label: "Task Completed",
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(30),
+        ),
+      ),
+      builder: (context) {
+        return Container(
+            // color: Colors.transparent,
+            margin: EdgeInsets.all(10),
+            padding: const EdgeInsets.only(
+              top: 4,
+            ),
+            height: MediaQuery.of(context).size.height * 0.24,
+            color: Get.isDarkMode ? darkGreyClr : Colors.transparent,
+            child: Column(
+              children: [
+                Spacer(),
+                Row(
+                  children: [
+                    Spacer(),
+                    InkWell(
+                      onTap: () {
+                        Get.back();
+
+                        _showdeleteBottomSheet(context, task);
+                      },
+                      child: Column(
+                        children: const [
+                          Icon(
+                            Icons.delete,
+                            color: primaryClr,
+                            size: 35,
+                          ),
+                          Text(
+                            "Delete",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: primaryClr,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Spacer(),
+                    InkWell(
+                      onTap: () {
+                        _taskController.delete(task);
+                        Get.back();
+                      },
+                      child: Column(
+                        children: const [
+                          Icon(
+                            Icons.edit,
+                            color: primaryClr,
+                            size: 35,
+                          ),
+                          Text(
+                            "Edit",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: primaryClr,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Spacer(),
+                    InkWell(
                       onTap: () {
                         _taskController.markTaskCompleted(task.id!);
                         Get.back();
                       },
-                      clr: primaryClr,
-                      context: context,
+                      child: Column(
+                        children: const [
+                          Icon(
+                            Icons.done,
+                            color: primaryClr,
+                            size: 35,
+                          ),
+                          Text(
+                            "Copleted",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: primaryClr,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-              _bottomSheetButton(
-                label: "Delete Task",
-                onTap: () {
-                  _taskController.delete(task);
-                  Get.back();
-                },
-                clr: Colors.red[300]!,
-                context: context,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              _bottomSheetButton(
-                label: "Close",
-                onTap: () {
-                  Get.back();
-                },
-                clr: Colors.red[300]!,
-                isClose: true,
-                context: context,
-              ),
-              const SizedBox(
-                height: 25,
-              )
-            ],
-          )),
+                    Spacer(),
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                _bottomSheetButton(
+                  label: "Cancel",
+                  onTap: () {
+                    Get.back();
+                  },
+                  clr: Colors.white,
+                  isClose: true,
+                  context: context,
+                ),
+                const SizedBox(
+                  height: 25,
+                )
+              ],
+            ));
+      },
+    );
+  }
+
+  _showdeleteBottomSheet(BuildContext context, Task task) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(30),
+        ),
+      ),
+      builder: (context) {
+        return Container(
+            // color: Colors.transparent,
+            margin: EdgeInsets.all(10),
+            padding: const EdgeInsets.only(
+              top: 4,
+            ),
+            height: MediaQuery.of(context).size.height * 0.34,
+            color: Get.isDarkMode ? darkGreyClr : Colors.transparent,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      _bottomSheetButton(
+                          label: "Delete this task only",
+                          onTap: () {
+                            _taskController.delete(task);
+                            Get.back();
+                          },
+                          clr: Color.fromRGBO(78, 91, 232, 0.06),
+                          textcolor: Colors.black,
+                          context: context),
+                      _bottomSheetButton(
+                          label: "Delete all future tasks",
+                          onTap: () {},
+                          clr: Color.fromRGBO(78, 91, 232, 0.06),
+                          textcolor: Colors.black,
+                          context: context),
+                      _bottomSheetButton(
+                          label: "Delete all tasks",
+                          onTap: () {},
+                          clr: Color.fromRGBO(78, 91, 232, 0.06),
+                          textcolor: Colors.black,
+                          context: context),
+                      _bottomSheetButton(
+                        label: "Cancel",
+                        onTap: () {
+                          Get.back();
+                        },
+                        clr: Colors.white,
+                        isClose: true,
+                        context: context,
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ));
+      },
     );
   }
 
@@ -161,6 +278,7 @@ class _HomePageState extends State<HomePage> {
     required Color clr,
     bool isClose = false,
     required BuildContext context,
+    Color textcolor = Colors.white,
   }) {
     return GestureDetector(
         onTap: onTap,
@@ -169,22 +287,17 @@ class _HomePageState extends State<HomePage> {
           height: 55,
           width: MediaQuery.of(context).size.width * 0.9,
           decoration: BoxDecoration(
-            border: Border.all(
-                width: 2,
-                color: isClose == true
-                    ? Get.isDarkMode
-                        ? Colors.grey[600]!
-                        : Colors.grey[300]!
-                    : clr),
             borderRadius: BorderRadius.circular(20),
-            color: isClose == true ? Colors.transparent : clr,
+            color: isClose == true ? primaryClr : clr,
           ),
           child: Center(
             child: Text(
               label,
-              style: isClose
-                  ? titleStyle
-                  : titleStyle.copyWith(color: Colors.white),
+              style: titleStyle.copyWith(
+                  color: textcolor, fontWeight: FontWeight.bold),
+              // style: isClose
+              //     ? titleStyle
+              //     : titleStyle.copyWith(color: Colors.white),
             ),
           ),
         ));
@@ -217,7 +330,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           MyButton(
-            height: 50,
+              height: 50,
               width: 130,
               label: "+  Create Task",
               onTap: () async {
@@ -273,8 +386,22 @@ class _HomePageState extends State<HomePage> {
     return AppBar(
         elevation: 0,
         title: Container(
-          child: CircleAvatar(
-            backgroundImage: AssetImage("images/profile.png"),
+          child: Row(
+            children: [
+              const CircleAvatar(
+                backgroundImage: AssetImage("images/profile.png"),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                "Welcome",
+                style: TextStyle(
+                    color: Colors.black87,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22),
+              ),
+            ],
           ),
         ),
         actions: [

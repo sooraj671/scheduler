@@ -3,6 +3,7 @@ import 'package:flutter_color_picker_wheel/models/button_behaviour.dart';
 import 'package:flutter_color_picker_wheel/presets/animation_config_presets.dart';
 import 'package:flutter_color_picker_wheel/presets/color_presets.dart';
 import 'package:flutter_color_picker_wheel/widgets/flutter_color_picker_wheel.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:scheduler/controllers/task_controller.dart';
@@ -10,7 +11,6 @@ import 'package:scheduler/ui/theme.dart';
 import 'package:scheduler/ui/widgets/button.dart';
 import 'package:scheduler/ui/widgets/input_field.dart';
 import 'package:scheduler/ui/widgets/input_notes.dart';
-
 import '../models/task.dart';
 
 class AddTaskPage extends StatefulWidget {
@@ -29,7 +29,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   DateTime _selectedDate = DateTime.now();
   String endTime = DateFormat("hh:mm a")
-      .format(DateTime.now().add(Duration(minutes: 30)))
+      .format(DateTime.now().add(const Duration(minutes: 30)))
       .toString();
   String startTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
   int _selectedRemind = 5;
@@ -64,6 +64,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     "Fri",
     "Sat",
   ];
+  final List<bool> _selected = List.generate(5, (i) => false);
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +84,16 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   hint: "Enter your title",
                   controller: _titleController,
                 ),
-                Text("Date & Time"),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  "Date & Time",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black54,
+                  ),
+                ),
                 MyInputField(
                   title: "Select Date",
                   hint: DateFormat.yMd().format(_selectedDate),
@@ -113,7 +123,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 12,
                     ),
                     Expanded(
@@ -134,121 +144,106 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   ],
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 15),
+                  margin: const EdgeInsets.only(top: 15),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
+                    children: const [
+                      SizedBox(
+                        height: 20,
+                      ),
                       Text(
                         "Alerts",
-                        style: TextStyle(color: Colors.grey[600]),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black54,
+                        ),
                       ),
-                      Text("Add Custom")
+                      Spacer(),
+                      Text(
+                        "Add Custom",
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                      ),
                     ],
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 10),
-                  padding: EdgeInsets.all(10),
+                  margin: const EdgeInsets.only(top: 10),
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: Color.fromRGBO(78, 91, 232, 0.06),
+                    color: const Color.fromRGBO(78, 91, 232, 0.06),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(5, (index) {
-                      return Container(
-                          width: 55,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 13),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5)),
-                          margin: EdgeInsets.only(right: 10),
-                          child: Text(
-                            alertList[index],
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.grey),
-                          ));
-                    }),
-                  ),
+                  child: alerttimeselect(),
                 ),
                 MyButton(
                     height: 50,
                     width: 350,
                     label: "Add more alerts",
                     onTap: () => _validateDate()),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  "Any Details ?",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black54,
+                  ),
+                ),
                 NoteField(
                   hint: "Enter Notes...",
                   controller: _noteController,
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 15),
+                  margin: const EdgeInsets.only(top: 15),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "How Often?",
-                        style: TextStyle(color: Colors.grey[600]),
+                    children: const [
+                      SizedBox(
+                        height: 20,
                       ),
                       Text(
-                        "Starting: 1/1/22",
-                        style: TextStyle(color: Colors.blue[800]),
-                      )
+                        "How often ?",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black54,
+                        ),
+                      ),
+                      Spacer(),
+                      Text(
+                        "Starting : 1/1/22",
+                        style: TextStyle(
+                          color: primaryClr,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                      ),
                     ],
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 10),
-                  padding: EdgeInsets.all(5),
+                  margin: const EdgeInsets.only(top: 10),
+                  padding: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: Color.fromRGBO(78, 91, 232, 0.06),
+                    color: const Color.fromRGBO(78, 91, 232, 0.06),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(4, (index) {
-                      return Container(
-                          width: 70,
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 5, vertical: 13),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          margin: EdgeInsets.only(right: 10),
-                          child: Text(
-                            repeatList[index],
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.grey),
-                          ));
-                    }),
-                  ),
+                  child: const howOften(),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 10),
-                  padding: EdgeInsets.all(5),
+                  margin: const EdgeInsets.only(top: 10),
+                  padding: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: Color.fromRGBO(78, 91, 232, 0.06),
+                    color: const Color.fromRGBO(78, 91, 232, 0.06),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(5, (index) {
-                      return Container(
-                          width: 50,
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 5, vertical: 13),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          margin: EdgeInsets.only(right: 10),
-                          child: Text(
-                            dayList[index],
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.grey),
-                          ));
-                    }),
-                  ),
+                  child: const weelSelect(),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8.0,
                 ),
                 Row(
@@ -258,25 +253,12 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     _colorPallete(),
                   ],
                 ),
-                WheelColorPicker(
-                  onSelect: (Color newColor) {
-                    setState(() {
-                      // color = newColor;
-                    });
-                  },
-                  behaviour: ButtonBehaviour.clickToOpen,
-                  animationConfig: fanLikeAnimationConfig,
-                  colorList: simpleColors,
-                  buttonSize: 40,
-                  pieceHeight: 25,
-                  innerRadius: 100,
-                  defaultColor: Colors.red,
-                ),
                 MyButton(
                     height: 50,
                     width: 350,
                     label: "Create Task",
-                    onTap: () => _validateDate())
+                    onTap: () => _validateDate()),
+                const SizedBox(height: 10),
               ],
             ),
           ),
@@ -295,7 +277,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           ),
           backgroundColor: Colors.white,
           colorText: pinkClr,
-          icon: Icon(Icons.warning_amber_rounded, color: Colors.red));
+          icon: const Icon(Icons.warning_amber_rounded, color: Colors.red));
     }
   }
 
@@ -319,50 +301,53 @@ class _AddTaskPageState extends State<AddTaskPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Pick a Color",
-          style: titleStyle,
+        const SizedBox(
+          height: 20,
         ),
-        SizedBox(
-          height: 8.0,
+        const Text(
+          "Pick a color",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black54,
+          ),
         ),
-        Wrap(
-          children: List<Widget>.generate(9, (int index) {
-            return GestureDetector(
-              onTap: () {
-                setState(() {
-                  _selectedColor = (index);
-                });
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(top: 5, left: 5.0, right: 5.0),
-                child: CircleAvatar(
-                  radius: 14,
-                  backgroundColor: index == 0
-                      ? bluishClr
-                      : index == 1
-                          ? redClr
-                          : index == 2
-                              ? pinkClr
-                              : index == 3
-                                  ? yellowClr
-                                  : index == 4
-                                      ? greenClr
-                                      : index == 5
-                                          ? orangeClr
-                                          : index == 6
-                                              ? brownClr
-                                              : index == 7
-                                                  ? purpleClr
-                                                  : blackClr,
-                  child: _selectedColor == index
-                      ? Icon(Icons.done, color: Colors.white, size: 16)
-                      : Container(),
+        const SizedBox(
+          height: 5.0,
+        ),
+        Row(
+          children: [
+            const colorRow(),
+            InkWell(
+              onTap: (() {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext) {
+                      return WheelColorPicker(
+                        onSelect: (Color newColor) {
+                          setState(() {
+                            // color = newColor;
+                          });
+                        },
+                        behaviour: ButtonBehaviour.clickToOpen,
+                        animationConfig: fanLikeAnimationConfig,
+                        colorList: simpleColors,
+                        buttonSize: 30,
+                        pieceHeight: 20,
+                        innerRadius: 20,
+                        defaultColor: Colors.red,
+                      );
+                    });
+              }),
+              child: Container(
+                height: 35,
+                width: 35,
+                child: const Image(
+                  image: AssetImage("assets/coloricon.png"),
                 ),
               ),
-            );
-          }),
-        )
+            )
+          ],
+        ),
       ],
     );
   }
@@ -375,7 +360,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       title: Transform(
         // you can forcefully translate values left side using Transform
         transform: Matrix4.translationValues(-35.0, 4.0, 0.0),
-        child: Text(
+        child: const Text(
           "Create New Task",
           style: TextStyle(
               color: Colors.black, fontWeight: FontWeight.bold, fontSize: 25),
@@ -383,7 +368,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       ),
       actions: [
         IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.close,
               color: Colors.black,
               size: 30,
@@ -391,7 +376,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
             onPressed: () {
               Navigator.pop(context, true);
             }),
-        SizedBox(width: 20),
+        const SizedBox(width: 20),
       ],
     );
   }
@@ -444,4 +429,231 @@ class _AddTaskPageState extends State<AddTaskPage> {
       {required MainAxisAlignment mainAxisAlignment,
       required CrossAxisAlignment crossAxisAlignment,
       required List<MyButton> children}) {}
+}
+
+class alerttimeselect extends StatefulWidget {
+  @override
+  _alerttimeselectState createState() => _alerttimeselectState();
+}
+
+List<String> alertList = [
+  "1m",
+  "3m",
+  "5m",
+  "8m",
+  "10m",
+];
+
+class _alerttimeselectState extends State<alerttimeselect> {
+  int selectedIndex = 0;
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      children: List.generate(5, (index) {
+        return InkWell(
+          onTap: () {
+            setState(() {
+              selectedIndex = index;
+            });
+          },
+          child: Container(
+            margin: const EdgeInsets.only(right: 10),
+            child: AppButton(
+              color: selectedIndex == index ? Colors.white : Colors.black,
+              backgroundColor:
+                  selectedIndex == index ? primaryClr : Colors.transparent,
+              size: 50,
+              text: alertList[index],
+            ),
+          ),
+        );
+      }),
+    );
+  }
+}
+
+class howOften extends StatefulWidget {
+  const howOften({super.key});
+
+  @override
+  State<howOften> createState() => _howOftenState();
+}
+
+List<String> dayList = [
+  "Once",
+  "Daily",
+  "Weekly",
+  "Monthly",
+];
+
+class _howOftenState extends State<howOften> {
+  int selectedweekIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Wrap(
+          children: List.generate(4, (index) {
+            return InkWell(
+              onTap: () {
+                setState(() {
+                  selectedweekIndex = index;
+                });
+              },
+              child: Container(
+                margin: const EdgeInsets.only(right: 10),
+                child: AppButton(
+                  color:
+                      selectedweekIndex == index ? Colors.white : Colors.black,
+                  backgroundColor: selectedweekIndex == index
+                      ? primaryClr
+                      : Colors.transparent,
+                  size: 67,
+                  text: dayList[index],
+                ),
+              ),
+            );
+          }),
+        ),
+        selectedweekIndex == 2
+            ? Container(
+                margin: const EdgeInsets.only(top: 10),
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: const Color.fromRGBO(78, 91, 232, 0.06),
+                ),
+                child: Row(
+                  children: [
+                    const Text("Every Two Weeks"),
+                    const Spacer(),
+                    Container(
+                      height: 35,
+                      width: 50,
+                      decoration: const BoxDecoration(
+                        color: primaryClr,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                        ),
+                      ),
+                      child: const Icon(
+                        Icons.add,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 1,
+                    ),
+                    Container(
+                      height: 35,
+                      width: 50,
+                      decoration: const BoxDecoration(
+                        color: primaryClr,
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(10),
+                          bottomRight: Radius.circular(10),
+                        ),
+                      ),
+                      child: const Icon(
+                        Icons.remove,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            : Container(),
+      ],
+    );
+  }
+}
+
+class weelSelect extends StatefulWidget {
+  const weelSelect({super.key});
+
+  @override
+  State<weelSelect> createState() => _weelSelectState();
+}
+
+List<String> weekList = [
+  "Sun",
+  "Mon",
+  "Tue",
+  "Wed",
+  "Thur",
+  "Fri",
+  "Sat",
+];
+
+class _weelSelectState extends State<weelSelect> {
+  int selectedIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      children: List.generate(7, (index) {
+        return InkWell(
+          onTap: () {
+            setState(() {
+              selectedIndex = index;
+            });
+          },
+          child: Container(
+            margin: const EdgeInsets.only(right: 10),
+            child: SmallAppButton(
+              color: selectedIndex == index ? Colors.white : Colors.black,
+              backgroundColor:
+                  selectedIndex == index ? primaryClr : Colors.transparent,
+              size: 34,
+              text: weekList[index],
+            ),
+          ),
+        );
+      }),
+    );
+  }
+}
+
+class colorRow extends StatefulWidget {
+  const colorRow({super.key});
+
+  @override
+  State<colorRow> createState() => _colorRowState();
+}
+
+List<Color> colorList = [
+  brownClr,
+  redClr,
+  pinkClr,
+  yellowClr,
+  greenClr,
+  redClr
+];
+
+class _colorRowState extends State<colorRow> {
+  int selectedIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      children: List.generate(6, (index) {
+        return InkWell(
+          onTap: () {
+            setState(() {
+              selectedIndex = index;
+            });
+          },
+          child: Container(
+            margin: const EdgeInsets.only(right: 10),
+            child: selectedIndex == index
+                ? UnColorButton(
+                    color: colorList[index], backgroundColor: primaryClr)
+                : ColorButton(color: colorList[index]),
+          ),
+        );
+      }),
+    );
+  }
 }
