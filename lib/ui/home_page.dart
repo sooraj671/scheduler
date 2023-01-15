@@ -415,14 +415,17 @@ class _HomePageState extends State<HomePage> {
             child: Stack(
               children: [
                 Container(
-                  margin: EdgeInsets.only(top: 15, bottom: 5, right: 10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100),
-                    color: Get.isDarkMode
-                        ? Colors.grey[600]
-                        : Color.fromRGBO(255, 124, 50, 1),
+                  child: Container(
+                    margin:
+                        EdgeInsets.only(top: 15, bottom: 5, right: 10, left: 9),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      color: Get.isDarkMode
+                          ? Colors.grey[600]
+                          : Color.fromRGBO(255, 124, 50, 1),
+                    ),
+                    width: 70,
                   ),
-                  width: 70,
                 ),
                 AnimatedPositioned(
                   duration: Duration(seconds: 1),

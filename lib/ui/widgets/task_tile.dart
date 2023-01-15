@@ -34,18 +34,6 @@ class _TaskTileState extends State<TaskTile> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  widget.task?.title ?? "",
-                  style: GoogleFonts.lato(
-                    textStyle: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -63,6 +51,18 @@ class _TaskTileState extends State<TaskTile> {
                       ),
                     ),
                   ],
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                Text(
+                  widget.task?.title ?? "",
+                  style: GoogleFonts.lato(
+                    textStyle: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
                 ),
                 const SizedBox(height: 12),
                 Text(

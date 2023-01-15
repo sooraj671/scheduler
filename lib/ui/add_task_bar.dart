@@ -12,6 +12,11 @@ import 'package:scheduler/ui/widgets/button.dart';
 import 'package:scheduler/ui/widgets/input_field.dart';
 import 'package:scheduler/ui/widgets/input_notes.dart';
 import '../models/task.dart';
+import 'package:datetime_picker_formfield_new/datetime_picker_formfield_new.dart';
+import 'package:scheduler/ui/notification_handler.dart';
+
+late int alertbefore;
+DateTime dateselected = DateTime.now();
 
 class AddTaskPage extends StatefulWidget {
   const AddTaskPage({Key? key}) : super(key: key);
@@ -21,18 +26,33 @@ class AddTaskPage extends StatefulWidget {
 }
 
 class _AddTaskPageState extends State<AddTaskPage> {
+  DateTime selectedDate = DateTime.now();
+
+  DateTime fullDate = DateTime.now();
+  final NotificationService _notificationService = NotificationService();
   final TaskController _taskController = Get.put(TaskController());
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
+  // TimeOfDay _startTime = TimeOfDay(
+  //     hour: int.parse(s.split(":")[0]), minute: int.parse(s.split(":")[1]));
 
   List<bool> _list = [true, false, false, false, false];
 
   DateTime _selectedDate = DateTime.now();
+  get selectedDates {
+    return DateFormat.yMMMd().format(_selectedDate);
+  }
+
   String endTime = DateFormat("hh:mm a")
       .format(DateTime.now().add(const Duration(minutes: 30)))
       .toString();
   String startTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
   int _selectedRemind = 5;
+  TimeOfDay stringToTimeOfDay(String tod) {
+    final format = DateFormat.jm(); //"6:00 AM"
+    return TimeOfDay.fromDateTime(format.parse(tod));
+  }
+
   List<int> remindList = [
     5,
     10,
@@ -44,7 +64,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
   ];
   String _selectedRepeat = "None";
   List<String> repeatList = ["Once", "Daily", "Weekly", "Monthly"];
-
   List<String> alertList = [
     "1m",
     "3m",
@@ -147,7 +166,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   margin: const EdgeInsets.only(top: 15),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       SizedBox(
                         height: 20,
                       ),
@@ -159,12 +178,29 @@ class _AddTaskPageState extends State<AddTaskPage> {
                         ),
                       ),
                       Spacer(),
-                      Text(
-                        "Add Custom",
-                        style: TextStyle(
-                          color: Colors.black87,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
+                      InkWell(
+                        onTap: (() {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  content: Container(
+                                    height: 30,
+                                    width: 10,
+                                    child: TextField(
+                                      keyboardType: TextInputType.number,
+                                    ),
+                                  ),
+                                );
+                              });
+                        }),
+                        child: Text(
+                          "Add Custom",
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
                         ),
                       ),
                     ],
@@ -202,7 +238,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   margin: const EdgeInsets.only(top: 15),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       SizedBox(
                         height: 20,
                       ),
@@ -215,7 +251,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                       ),
                       Spacer(),
                       Text(
-                        "Starting : 1/1/22",
+                        "Starting - ${dateselected.day}/${dateselected.month}/${dateselected.year}",
                         style: TextStyle(
                           color: primaryClr,
                           fontWeight: FontWeight.bold,
@@ -257,7 +293,18 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     height: 50,
                     width: 350,
                     label: "Create Task",
-                    onTap: () => _validateDate()),
+                    onTap: () async {
+                      fullDate = DateTimeField.combine(
+                          _selectedDate, stringToTimeOfDay(startTime));
+                      // fullDate =
+                      //     fullDate.subtract(Duration(minutes: alertbefore));
+
+                      await _notificationService.scheduleNotifications(
+                          title: _titleController.text,
+                          body: _noteController.text,
+                          time: fullDate);
+                      _validateDate();
+                    }),
                 const SizedBox(height: 10),
               ],
             ),
@@ -266,10 +313,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
   }
 
   _validateDate() {
-    if (_titleController.text.isNotEmpty && _noteController.text.isNotEmpty) {
+    if (_titleController.text.isNotEmpty) {
       _addTaskToDb();
       Get.back();
-    } else if (_titleController.text.isEmpty || _noteController.text.isEmpty) {
+    } else if (_titleController.text.isEmpty) {
       Get.snackbar("Error", "All fields are required !",
           snackPosition: SnackPosition.BOTTOM,
           margin: const EdgeInsets.only(
@@ -391,6 +438,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     if (_pickerDate != null) {
       setState(() {
         _selectedDate = _pickerDate;
+        dateselected = _pickerDate;
         print(_selectedDate);
       });
     } else {
@@ -446,6 +494,7 @@ List<String> alertList = [
 
 class _alerttimeselectState extends State<alerttimeselect> {
   int selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Wrap(
@@ -454,6 +503,7 @@ class _alerttimeselectState extends State<alerttimeselect> {
           onTap: () {
             setState(() {
               selectedIndex = index;
+              alertbefore = selectedIndex;
             });
           },
           child: Container(
@@ -488,6 +538,9 @@ List<String> dayList = [
 
 class _howOftenState extends State<howOften> {
   int selectedweekIndex = 0;
+  int uniq = 1;
+  int weekcounter = 1;
+  int monthcounter = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -526,7 +579,7 @@ class _howOftenState extends State<howOften> {
                 ),
                 child: Row(
                   children: [
-                    const Text("Every Two Weeks"),
+                    Text("In Every ${weekcounter.toString()} weeks"),
                     const Spacer(),
                     Container(
                       height: 35,
@@ -538,9 +591,16 @@ class _howOftenState extends State<howOften> {
                           bottomLeft: Radius.circular(10),
                         ),
                       ),
-                      child: const Icon(
-                        Icons.add,
-                        color: Colors.white,
+                      child: InkWell(
+                        onTap: (() {
+                          setState(() {
+                            weekcounter++;
+                          });
+                        }),
+                        child: const Icon(
+                          Icons.add,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                     const SizedBox(
@@ -556,15 +616,84 @@ class _howOftenState extends State<howOften> {
                           bottomRight: Radius.circular(10),
                         ),
                       ),
-                      child: const Icon(
-                        Icons.remove,
-                        color: Colors.white,
+                      child: InkWell(
+                        onTap: (() {
+                          setState(() {
+                            weekcounter--;
+                          });
+                        }),
+                        child: const Icon(
+                          Icons.remove,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ],
                 ),
               )
-            : Container(),
+            : selectedweekIndex == 3
+                ? Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color.fromRGBO(78, 91, 232, 0.06),
+                    ),
+                    child: Row(
+                      children: [
+                        Text("In Every ${monthcounter.toString()} Month"),
+                        const Spacer(),
+                        Container(
+                          height: 35,
+                          width: 50,
+                          decoration: const BoxDecoration(
+                            color: primaryClr,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              bottomLeft: Radius.circular(10),
+                            ),
+                          ),
+                          child: InkWell(
+                            onTap: (() {
+                              setState(() {
+                                monthcounter++;
+                              });
+                            }),
+                            child: const Icon(
+                              Icons.add,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 1,
+                        ),
+                        Container(
+                          height: 35,
+                          width: 50,
+                          decoration: const BoxDecoration(
+                            color: primaryClr,
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(10),
+                              bottomRight: Radius.circular(10),
+                            ),
+                          ),
+                          child: InkWell(
+                            onTap: (() {
+                              setState(() {
+                                monthcounter--;
+                              });
+                            }),
+                            child: const Icon(
+                              Icons.remove,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : Container(),
       ],
     );
   }
@@ -588,7 +717,7 @@ List<String> weekList = [
 ];
 
 class _weelSelectState extends State<weelSelect> {
-  int selectedIndex = 0;
+  List<int> selectedIndex = [0];
 
   @override
   Widget build(BuildContext context) {
@@ -597,15 +726,17 @@ class _weelSelectState extends State<weelSelect> {
         return InkWell(
           onTap: () {
             setState(() {
-              selectedIndex = index;
+              selectedIndex.add(index);
             });
           },
           child: Container(
             margin: const EdgeInsets.only(right: 10),
             child: SmallAppButton(
-              color: selectedIndex == index ? Colors.white : Colors.black,
-              backgroundColor:
-                  selectedIndex == index ? primaryClr : Colors.transparent,
+              color:
+                  selectedIndex.contains(index) ? Colors.white : Colors.black,
+              backgroundColor: selectedIndex.contains(index)
+                  ? primaryClr
+                  : Colors.transparent,
               size: 34,
               text: weekList[index],
             ),

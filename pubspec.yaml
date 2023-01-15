@@ -47,6 +47,7 @@ dependencies:
   sqflite:
   flutter_staggered_animations:
   flutter_colorpicker: ^1.0.3
+  datetime_picker_formfield_new: ^2.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
