@@ -177,7 +177,7 @@ class _HomePageState extends State<HomePage> {
                             size: 35,
                           ),
                           Text(
-                            "Copleted",
+                            "Completed",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: primaryClr,

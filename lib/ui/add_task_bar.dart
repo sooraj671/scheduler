@@ -17,6 +17,10 @@ import 'package:scheduler/ui/notification_handler.dart';
 
 late int alertbefore;
 DateTime dateselected = DateTime.now();
+late Color selectedCol;
+Color addtaskcol = primaryClr;
+int selectedcolIndex = -1;
+int customcolor = 0;
 
 class AddTaskPage extends StatefulWidget {
   const AddTaskPage({Key? key}) : super(key: key);
@@ -215,11 +219,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   ),
                   child: alerttimeselect(),
                 ),
-                MyButton(
-                    height: 50,
-                    width: 350,
-                    label: "Add more alerts",
-                    onTap: () => _validateDate()),
+                // MyButton(
+                //     height: 50,
+                //     width: 350,
+                //     label: "Add more alerts",
+                //     onTap: () => _validateDate()),
                 const SizedBox(
                   height: 20,
                 ),
@@ -286,7 +290,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    _colorPallete(),
+                    colorPallete(),
                   ],
                 ),
                 MyButton(
@@ -342,61 +346,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
       isCompleted: 0,
     ));
     print("My id is " + "$value");
-  }
-
-  _colorPallete() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(
-          height: 20,
-        ),
-        const Text(
-          "Pick a color",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.black54,
-          ),
-        ),
-        const SizedBox(
-          height: 5.0,
-        ),
-        Row(
-          children: [
-            const colorRow(),
-            InkWell(
-              onTap: (() {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext) {
-                      return WheelColorPicker(
-                        onSelect: (Color newColor) {
-                          setState(() {
-                            // color = newColor;
-                          });
-                        },
-                        behaviour: ButtonBehaviour.clickToOpen,
-                        animationConfig: fanLikeAnimationConfig,
-                        colorList: simpleColors,
-                        buttonSize: 30,
-                        pieceHeight: 20,
-                        innerRadius: 20,
-                        defaultColor: Colors.red,
-                      );
-                    });
-              }),
-              child: Container(
-                height: 35,
-                width: 35,
-                child: const Image(
-                  image: AssetImage("assets/coloricon.png"),
-                ),
-              ),
-            )
-          ],
-        ),
-      ],
-    );
   }
 
   _appBar(BuildContext context) {
@@ -717,29 +666,50 @@ List<String> weekList = [
 ];
 
 class _weelSelectState extends State<weelSelect> {
-  List<int> selectedIndex = [0];
+  List<int> selectedIndex = [];
 
   @override
   Widget build(BuildContext context) {
     return Wrap(
       children: List.generate(7, (index) {
         return InkWell(
-          onTap: () {
-            setState(() {
-              selectedIndex.add(index);
-            });
-          },
           child: Container(
             margin: const EdgeInsets.only(right: 10),
-            child: SmallAppButton(
-              color:
-                  selectedIndex.contains(index) ? Colors.white : Colors.black,
-              backgroundColor: selectedIndex.contains(index)
-                  ? primaryClr
-                  : Colors.transparent,
-              size: 34,
-              text: weekList[index],
-            ),
+            child: selectedIndex.contains(index)
+                ? InkWell(
+                    onTap: () {
+                      setState(() {
+                        selectedIndex.remove(index);
+                      });
+                    },
+                    child: SmallAppButton(
+                      color: selectedIndex.contains(index)
+                          ? Colors.white
+                          : Colors.black,
+                      backgroundColor: selectedIndex.contains(index)
+                          ? primaryClr
+                          : Colors.transparent,
+                      size: 34,
+                      text: weekList[index],
+                    ),
+                  )
+                : InkWell(
+                    onTap: () {
+                      setState(() {
+                        selectedIndex.add(index);
+                      });
+                    },
+                    child: SmallAppButton(
+                      color: selectedIndex.contains(index)
+                          ? Colors.white
+                          : Colors.black,
+                      backgroundColor: selectedIndex.contains(index)
+                          ? primaryClr
+                          : Colors.transparent,
+                      size: 34,
+                      text: weekList[index],
+                    ),
+                  ),
           ),
         );
       }),
@@ -760,31 +730,148 @@ List<Color> colorList = [
   pinkClr,
   yellowClr,
   greenClr,
-  redClr
 ];
 
 class _colorRowState extends State<colorRow> {
-  int selectedIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      children: List.generate(6, (index) {
+      children: List.generate(5, (index) {
         return InkWell(
           onTap: () {
             setState(() {
-              selectedIndex = index;
+              selectedcolIndex = index;
+              customcolor = 0;
+              addtaskcol = colorList[selectedcolIndex];
             });
           },
           child: Container(
             margin: const EdgeInsets.only(right: 10),
-            child: selectedIndex == index
+            child: selectedcolIndex == index
                 ? UnColorButton(
                     color: colorList[index], backgroundColor: primaryClr)
                 : ColorButton(color: colorList[index]),
           ),
         );
       }),
+    );
+  }
+}
+
+class colorPallete extends StatefulWidget {
+  const colorPallete({super.key});
+
+  @override
+  State<colorPallete> createState() => _colorPalleteState();
+}
+
+class _colorPalleteState extends State<colorPallete> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(
+          height: 20,
+        ),
+        const Text(
+          "Pick a color",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black54,
+          ),
+        ),
+        const SizedBox(
+          height: 5.0,
+        ),
+        Row(
+          children: [
+            colorRow(),
+            customcolor == 1
+                ? Container(
+                    height: 40,
+                    width: 60,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: primaryClr,
+                    ),
+                    child: Row(
+                      children: [
+                        const SizedBox(
+                          width: 6,
+                        ),
+                        InkWell(
+                          onTap: () => showDialog(
+                              context: context,
+                              builder: (BuildContext) {
+                                return WheelColorPicker(
+                                  onSelect: (Color newColor) {
+                                    setState(() {
+                                      customcolor = 1;
+                                      selectedCol = newColor;
+                                      addtaskcol = newColor;
+                                    });
+                                  },
+                                  behaviour: ButtonBehaviour.clickToOpen,
+                                  animationConfig: fanLikeAnimationConfig,
+                                  colorList: simpleColors,
+                                  buttonSize: 30,
+                                  pieceHeight: 20,
+                                  innerRadius: 20,
+                                  defaultColor: Colors.red,
+                                );
+                              }),
+                          child: Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 6, left: 1.5, right: 3, bottom: 6),
+                              child: CircleAvatar(
+                                radius: 12,
+                                backgroundColor: selectedCol,
+                              )),
+                        ),
+                        const Icon(
+                          Icons.done,
+                          size: 18,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                  )
+                : InkWell(
+                    onTap: (() {
+                      selectedcolIndex = -1;
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext) {
+                            return WheelColorPicker(
+                              onSelect: (Color newColor) {
+                                setState(() {
+                                  customcolor = 1;
+                                  selectedCol = newColor;
+                                  addtaskcol = newColor;
+                                });
+                              },
+                              behaviour: ButtonBehaviour.clickToOpen,
+                              animationConfig: fanLikeAnimationConfig,
+                              colorList: simpleColors,
+                              buttonSize: 30,
+                              pieceHeight: 20,
+                              innerRadius: 20,
+                              defaultColor: Colors.red,
+                            );
+                          });
+                    }),
+                    child: Container(
+                      height: 35,
+                      width: 35,
+                      child: const Image(
+                        image: AssetImage("assets/coloricon.png"),
+                      ),
+                    ),
+                  )
+          ],
+        ),
+      ],
     );
   }
 }
