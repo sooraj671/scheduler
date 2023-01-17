@@ -1,8 +1,6 @@
-import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:scheduler/ui/add_task_bar.dart';
 
 import '../../models/task.dart';
 import '../theme.dart';
@@ -125,11 +123,7 @@ class _TaskTileState extends State<TaskTile> {
       case 4:
         return greenClr;
       case 5:
-        return orangeClr;
-      case 6:
-        return brownClr;
-      case 7:
-        return purpleClr;
+        return selectedCol;
       default:
         return blackClr;
     }

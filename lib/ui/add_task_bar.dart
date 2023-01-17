@@ -831,6 +831,7 @@ class _colorPalleteState extends State<colorPallete> {
                                 return WheelColorPicker(
                                   onSelect: (Color newColor) {
                                     setState(() {
+                                      _selectedColor = 5;
                                       customcolor = 1;
                                       selectedCol = newColor;
                                       addtaskcol = newColor;
@@ -870,6 +871,8 @@ class _colorPalleteState extends State<colorPallete> {
                             return WheelColorPicker(
                               onSelect: (Color newColor) {
                                 setState(() {
+                                  _selectedColor = 5;
+
                                   customcolor = 1;
                                   selectedCol = newColor;
                                   addtaskcol = newColor;
