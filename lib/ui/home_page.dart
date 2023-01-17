@@ -397,7 +397,7 @@ class _HomePageState extends State<HomePage> {
               Text(
                 "Welcome",
                 style: TextStyle(
-                    color: Colors.black87,
+                    color: Get.isDarkMode ? Colors.white : Colors.black87,
                     fontWeight: FontWeight.bold,
                     fontSize: 22),
               ),
@@ -409,6 +409,7 @@ class _HomePageState extends State<HomePage> {
             onTap: () {
               setState(() {
                 ThemeService().switchTheme();
+
                 left = left != 50 ? 50 : 10;
               });
             },

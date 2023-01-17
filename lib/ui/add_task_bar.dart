@@ -21,6 +21,9 @@ late Color selectedCol;
 Color addtaskcol = primaryClr;
 int selectedcolIndex = -1;
 int customcolor = 0;
+int selectedalertIndex = -1;
+
+List<int> alertList = [1, 3, 5, 8];
 
 class AddTaskPage extends StatefulWidget {
   const AddTaskPage({Key? key}) : super(key: key);
@@ -40,12 +43,12 @@ class _AddTaskPageState extends State<AddTaskPage> {
   // TimeOfDay _startTime = TimeOfDay(
   //     hour: int.parse(s.split(":")[0]), minute: int.parse(s.split(":")[1]));
 
-  List<bool> _list = [true, false, false, false, false];
-
   DateTime _selectedDate = DateTime.now();
   get selectedDates {
     return DateFormat.yMMMd().format(_selectedDate);
   }
+
+  final myController = TextEditingController();
 
   String endTime = DateFormat("hh:mm a")
       .format(DateTime.now().add(const Duration(minutes: 30)))
@@ -57,37 +60,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
     return TimeOfDay.fromDateTime(format.parse(tod));
   }
 
-  List<int> remindList = [
-    5,
-    10,
-    15,
-    20,
-    30,
-    45,
-    60,
-  ];
   String _selectedRepeat = "None";
-  List<String> repeatList = ["Once", "Daily", "Weekly", "Monthly"];
-  List<String> alertList = [
-    "1m",
-    "3m",
-    "5m",
-    "8m",
-    "10m",
-  ];
-  int _selectedColor = 0;
 
-  // String _selectedRepeat = "None";
-  List<String> dayList = [
-    "Sun",
-    "Mon",
-    "Tue",
-    "Wed",
-    "Thur",
-    "Fri",
-    "Sat",
-  ];
-  final List<bool> _selected = List.generate(5, (i) => false);
+  int _selectedColor = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -110,19 +85,19 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 const SizedBox(
                   height: 20,
                 ),
-                const Text(
+                Text(
                   "Date & Time",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Colors.black54,
+                    color: Get.isDarkMode ? Colors.white : Colors.black54,
                   ),
                 ),
                 MyInputField(
                   title: "Select Date",
                   hint: DateFormat.yMd().format(_selectedDate),
                   widget: IconButton(
-                    icon: const Icon(Icons.calendar_today_outlined,
-                        color: Colors.black),
+                    icon: Icon(Icons.calendar_today_outlined,
+                        color: Get.isDarkMode ? Colors.white : Colors.black),
                     onPressed: () {
                       _getDateFromUser();
                     },
@@ -135,13 +110,13 @@ class _AddTaskPageState extends State<AddTaskPage> {
                         title: "Start",
                         hint: startTime,
                         widget: IconButton(
-                          color: Colors.black,
+                          color: Get.isDarkMode ? Colors.white : Colors.black,
                           onPressed: () {
                             _getTimeFromUser(isStartTime: true);
                           },
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.access_time_rounded,
-                            color: Colors.black,
+                            color: Get.isDarkMode ? Colors.white : Colors.black,
                           ),
                         ),
                       ),
@@ -157,9 +132,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
                           onPressed: () {
                             _getTimeFromUser(isStartTime: false);
                           },
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.access_time_rounded,
-                            color: Colors.black,
+                            color: Get.isDarkMode ? Colors.white : Colors.black,
                           ),
                         ),
                       ),
@@ -177,9 +152,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
                       Text(
                         "Alerts",
                         style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black54,
-                        ),
+                            fontWeight: FontWeight.bold,
+                            color:
+                                Get.isDarkMode ? Colors.white : Colors.black54),
                       ),
                       Spacer(),
                       InkWell(
@@ -188,11 +163,35 @@ class _AddTaskPageState extends State<AddTaskPage> {
                               context: context,
                               builder: (context) {
                                 return AlertDialog(
+                                  actions: [
+                                    Row(
+                                      children: [
+                                        InkWell(
+                                          onTap: () => Get.back(),
+                                          child: Text("Cancel"),
+                                        ),
+                                        Spacer(),
+                                        InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              alertList.add(
+                                                  int.parse(myController.text));
+                                              selectedalertIndex = 4;
+
+                                              Get.back();
+                                            });
+                                          },
+                                          child: Text("Confirm"),
+                                        ),
+                                      ],
+                                    )
+                                  ],
                                   content: Container(
-                                    height: 30,
+                                    height: 40,
                                     width: 10,
                                     child: TextField(
                                       keyboardType: TextInputType.number,
+                                      controller: myController,
                                     ),
                                   ),
                                 );
@@ -201,7 +200,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
                         child: Text(
                           "Add Custom",
                           style: TextStyle(
-                            color: Colors.black87,
+                            color:
+                                Get.isDarkMode ? Colors.white : Colors.black87,
                             fontWeight: FontWeight.bold,
                             fontSize: 13,
                           ),
@@ -227,11 +227,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 const SizedBox(
                   height: 20,
                 ),
-                const Text(
+                Text(
                   "Any Details ?",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Colors.black54,
+                    color: Get.isDarkMode ? Colors.white : Colors.black54,
                   ),
                 ),
                 NoteField(
@@ -250,7 +250,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                         "How often ?",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Colors.black54,
+                          color: Get.isDarkMode ? Colors.white : Colors.black54,
                         ),
                       ),
                       Spacer(),
@@ -350,23 +350,29 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   _appBar(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false,
       elevation: 0,
       centerTitle: false,
       titleSpacing: 0.0,
       title: Transform(
         // you can forcefully translate values left side using Transform
         transform: Matrix4.translationValues(-35.0, 4.0, 0.0),
-        child: const Text(
-          "Create New Task",
-          style: TextStyle(
-              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 25),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 50),
+          child: Text(
+            "Create New Task",
+            style: TextStyle(
+                color: Get.isDarkMode ? Colors.white : Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 25),
+          ),
         ),
       ),
       actions: [
         IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.close,
-              color: Colors.black,
+              color: Get.isDarkMode ? Colors.white : Colors.black,
               size: 30,
             ),
             onPressed: () {
@@ -433,40 +439,39 @@ class alerttimeselect extends StatefulWidget {
   _alerttimeselectState createState() => _alerttimeselectState();
 }
 
-List<String> alertList = [
-  "1m",
-  "3m",
-  "5m",
-  "8m",
-  "10m",
-];
-
 class _alerttimeselectState extends State<alerttimeselect> {
-  int selectedIndex = 0;
-
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      children: List.generate(5, (index) {
-        return InkWell(
-          onTap: () {
-            setState(() {
-              selectedIndex = index;
-              alertbefore = selectedIndex;
-            });
-          },
-          child: Container(
-            margin: const EdgeInsets.only(right: 10),
-            child: AppButton(
-              color: selectedIndex == index ? Colors.white : Colors.black,
-              backgroundColor:
-                  selectedIndex == index ? primaryClr : Colors.transparent,
-              size: 50,
-              text: alertList[index],
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Wrap(
+        children: List.generate(alertList.length, (index) {
+          return InkWell(
+            onTap: () {
+              setState(() {
+                selectedalertIndex = index;
+                alertbefore = alertList[selectedalertIndex];
+                print(alertbefore);
+              });
+            },
+            child: Container(
+              margin: const EdgeInsets.only(right: 10),
+              child: AppButton(
+                color: selectedalertIndex == index
+                    ? Colors.white
+                    : Get.isDarkMode
+                        ? Colors.white
+                        : Colors.black,
+                backgroundColor: selectedalertIndex == index
+                    ? primaryClr
+                    : Colors.transparent,
+                size: 50,
+                text: "${alertList[index]}m",
+              ),
             ),
-          ),
-        );
-      }),
+          );
+        }),
+      ),
     );
   }
 }
@@ -506,8 +511,11 @@ class _howOftenState extends State<howOften> {
               child: Container(
                 margin: const EdgeInsets.only(right: 10),
                 child: AppButton(
-                  color:
-                      selectedweekIndex == index ? Colors.white : Colors.black,
+                  color: selectedweekIndex == index
+                      ? Colors.white
+                      : Get.isDarkMode
+                          ? Colors.white
+                          : Colors.black,
                   backgroundColor: selectedweekIndex == index
                       ? primaryClr
                       : Colors.transparent,
@@ -685,7 +693,9 @@ class _weelSelectState extends State<weelSelect> {
                     child: SmallAppButton(
                       color: selectedIndex.contains(index)
                           ? Colors.white
-                          : Colors.black,
+                          : Get.isDarkMode
+                              ? Colors.white
+                              : Colors.black,
                       backgroundColor: selectedIndex.contains(index)
                           ? primaryClr
                           : Colors.transparent,
@@ -702,7 +712,9 @@ class _weelSelectState extends State<weelSelect> {
                     child: SmallAppButton(
                       color: selectedIndex.contains(index)
                           ? Colors.white
-                          : Colors.black,
+                          : Get.isDarkMode
+                              ? Colors.white
+                              : Colors.black,
                       backgroundColor: selectedIndex.contains(index)
                           ? primaryClr
                           : Colors.transparent,
@@ -774,11 +786,11 @@ class _colorPalleteState extends State<colorPallete> {
         const SizedBox(
           height: 20,
         ),
-        const Text(
+        Text(
           "Pick a color",
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.black54,
+            color: Get.isDarkMode ? Colors.white : Colors.black54,
           ),
         ),
         const SizedBox(
