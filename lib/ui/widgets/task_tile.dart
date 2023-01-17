@@ -115,7 +115,7 @@ class _TaskTileState extends State<TaskTile> {
   _getBGClr(int no) {
     switch (no) {
       case 0:
-        return bluishClr;
+        return brownClr;
       case 1:
         return redClr;
       case 2:

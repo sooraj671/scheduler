@@ -2,7 +2,6 @@ import 'package:datetime_picker_formfield_new/datetime_picker_formfield_new.dart
 import 'package:flutter/material.dart';
 import 'package:scheduler/ui/notification_handler.dart';
 
-
 class MyNoteScreen extends StatefulWidget {
   const MyNoteScreen({Key? key}) : super(key: key);
 
@@ -79,24 +78,19 @@ class _NoteThumbnailState extends State<NoteThumbnail> {
         context: context,
         initialTime: TimeOfDay.fromDateTime(selectedDate),
       );
-      print("....................///////////////.................)");
-      print(time);
 
       if (time != null) {
         setState(() {
           fullDate = DateTimeField.combine(date, time);
         });
-        print(fullDate);
+
         await _notificationService.scheduleNotifications(
             id: widget.id,
             title: widget.title,
             body: widget.content,
             time: fullDate);
       }
-      print("........................");
-      print(date);
-      print(time);
-      print(selectedDate);
+
       return DateTimeField.combine(date, time);
     } else {
       return selectedDate;

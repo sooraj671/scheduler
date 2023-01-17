@@ -15,13 +15,23 @@ import '../models/task.dart';
 import 'package:datetime_picker_formfield_new/datetime_picker_formfield_new.dart';
 import 'package:scheduler/ui/notification_handler.dart';
 
-late int alertbefore;
+var selectedcustime;
+int alertbefore = 0;
 DateTime dateselected = DateTime.now();
 late Color selectedCol;
 Color addtaskcol = primaryClr;
 int selectedcolIndex = -1;
 int customcolor = 0;
 int selectedalertIndex = -1;
+int _selectedColor = 0;
+String _selectedRepeat = "None";
+List<String> repeatList = [
+  "None",
+  "Daily",
+  "Weekly",
+  "Monthly",
+  "Yearly",
+];
 
 List<int> alertList = [1, 3, 5, 8];
 
@@ -56,13 +66,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
   String startTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
   int _selectedRemind = 5;
   TimeOfDay stringToTimeOfDay(String tod) {
-    final format = DateFormat.jm(); //"6:00 AM"
+    final format = DateFormat.jm();
     return TimeOfDay.fromDateTime(format.parse(tod));
   }
-
-  String _selectedRepeat = "None";
-
-  int _selectedColor = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -176,7 +182,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                             setState(() {
                                               alertList.add(
                                                   int.parse(myController.text));
-                                              selectedalertIndex = 4;
+                                              // selectedalertIndex = 4;
 
                                               Get.back();
                                             });
@@ -219,11 +225,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   ),
                   child: alerttimeselect(),
                 ),
-                // MyButton(
-                //     height: 50,
-                //     width: 350,
-                //     label: "Add more alerts",
-                //     onTap: () => _validateDate()),
                 const SizedBox(
                   height: 20,
                 ),
@@ -298,38 +299,37 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     width: 350,
                     label: "Create Task",
                     onTap: () async {
-                      fullDate = DateTimeField.combine(
-                          _selectedDate, stringToTimeOfDay(startTime));
-                      // fullDate =
-                      //     fullDate.subtract(Duration(minutes: alertbefore));
+                      fullDate =
+                          DateTimeField.combine(_selectedDate, selectedcustime);
+
+                      fullDate =
+                          fullDate.subtract(Duration(minutes: alertbefore));
 
                       await _notificationService.scheduleNotifications(
+                          id: 2,
                           title: _titleController.text,
-                          body: _noteController.text,
+                          body: "Body",
                           time: fullDate);
-                      _validateDate();
+                      if (_titleController.text.isNotEmpty) {
+                        _addTaskToDb();
+                        Get.back();
+                      } else if (_titleController.text.isEmpty) {
+                        Get.snackbar("Error", "All fields are required !",
+                            snackPosition: SnackPosition.BOTTOM,
+                            margin: const EdgeInsets.only(
+                              bottom: 10,
+                            ),
+                            backgroundColor: Colors.white,
+                            colorText: pinkClr,
+                            icon: const Icon(Icons.warning_amber_rounded,
+                                color: Colors.red));
+                      }
                     }),
                 const SizedBox(height: 10),
               ],
             ),
           ),
         ));
-  }
-
-  _validateDate() {
-    if (_titleController.text.isNotEmpty) {
-      _addTaskToDb();
-      Get.back();
-    } else if (_titleController.text.isEmpty) {
-      Get.snackbar("Error", "All fields are required !",
-          snackPosition: SnackPosition.BOTTOM,
-          margin: const EdgeInsets.only(
-            bottom: 10,
-          ),
-          backgroundColor: Colors.white,
-          colorText: pinkClr,
-          icon: const Icon(Icons.warning_amber_rounded, color: Colors.red));
-    }
   }
 
   _addTaskToDb() async {
@@ -409,6 +409,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     } else if (isStartTime == true) {
       setState(() {
         startTime = _formatedTime;
+        selectedcustime = pickedTime;
       });
     } else if (isStartTime == false) {
       setState(() {
@@ -506,6 +507,13 @@ class _howOftenState extends State<howOften> {
               onTap: () {
                 setState(() {
                   selectedweekIndex = index;
+                  index == 1
+                      ? _selectedRepeat = "Daily"
+                      : index == 2
+                          ? _selectedRepeat = "Weekly"
+                          : index == 3
+                              ? _selectedRepeat = "Monthly"
+                              : _selectedRepeat = "None";
                 });
               },
               child: Container(
@@ -576,7 +584,7 @@ class _howOftenState extends State<howOften> {
                       child: InkWell(
                         onTap: (() {
                           setState(() {
-                            weekcounter--;
+                            weekcounter == 0 ? weekcounter = 0 : weekcounter--;
                           });
                         }),
                         child: const Icon(
@@ -638,7 +646,9 @@ class _howOftenState extends State<howOften> {
                           child: InkWell(
                             onTap: (() {
                               setState(() {
-                                monthcounter--;
+                                monthcounter == 0
+                                    ? monthcounter = 0
+                                    : monthcounter--;
                               });
                             }),
                             child: const Icon(
@@ -752,6 +762,8 @@ class _colorRowState extends State<colorRow> {
         return InkWell(
           onTap: () {
             setState(() {
+              _selectedColor = (index);
+
               selectedcolIndex = index;
               customcolor = 0;
               addtaskcol = colorList[selectedcolIndex];
