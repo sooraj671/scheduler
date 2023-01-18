@@ -5,6 +5,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:scheduler/ui/add_task.dart';
 import 'package:scheduler/ui/add_task_bar.dart';
 import 'package:scheduler/ui/theme.dart';
 import 'package:scheduler/ui/widgets/button.dart';
@@ -105,18 +106,18 @@ class _HomePageState extends State<HomePage> {
       builder: (context) {
         return Container(
             // color: Colors.transparent,
-            margin: EdgeInsets.all(10),
+            margin: const EdgeInsets.all(10),
             padding: const EdgeInsets.only(
               top: 4,
             ),
             height: MediaQuery.of(context).size.height * 0.24,
-            color: Get.isDarkMode ? darkGreyClr : Colors.transparent,
+            color: Colors.transparent,
             child: Column(
               children: [
-                Spacer(),
+                const Spacer(),
                 Row(
                   children: [
-                    Spacer(),
+                    const Spacer(),
                     InkWell(
                       onTap: () {
                         Get.back();
@@ -140,20 +141,29 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     InkWell(
                       onTap: () {
                         _taskController.delete(task);
                         Get.back();
                       },
                       child: Column(
-                        children: const [
-                          Icon(
-                            Icons.edit,
-                            color: primaryClr,
-                            size: 35,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              _taskController.delete(task);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => EditTaskPage()));
+                            },
+                            child: const Icon(
+                              Icons.edit,
+                              color: primaryClr,
+                              size: 35,
+                            ),
                           ),
-                          Text(
+                          const Text(
                             "Edit",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
@@ -163,7 +173,7 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     InkWell(
                       onTap: () {
                         _taskController.markTaskCompleted(task.id!);
@@ -186,7 +196,7 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                   ],
                 ),
                 const SizedBox(
@@ -221,7 +231,7 @@ class _HomePageState extends State<HomePage> {
       builder: (context) {
         return Container(
             // color: Colors.transparent,
-            margin: EdgeInsets.all(10),
+            margin: const EdgeInsets.all(10),
             padding: const EdgeInsets.only(
               top: 4,
             ),
@@ -239,19 +249,19 @@ class _HomePageState extends State<HomePage> {
                             _taskController.delete(task);
                             Get.back();
                           },
-                          clr: Color.fromRGBO(78, 91, 232, 0.06),
+                          clr: const Color.fromRGBO(78, 91, 232, 0.06),
                           textcolor: Colors.black,
                           context: context),
                       _bottomSheetButton(
                           label: "Delete all future tasks",
                           onTap: () {},
-                          clr: Color.fromRGBO(78, 91, 232, 0.06),
+                          clr: const Color.fromRGBO(78, 91, 232, 0.06),
                           textcolor: Colors.black,
                           context: context),
                       _bottomSheetButton(
                           label: "Delete all tasks",
                           onTap: () {},
-                          clr: Color.fromRGBO(78, 91, 232, 0.06),
+                          clr: const Color.fromRGBO(78, 91, 232, 0.06),
                           textcolor: Colors.black,
                           context: context),
                       _bottomSheetButton(
@@ -319,10 +329,10 @@ class _HomePageState extends State<HomePage> {
                     fontSize: 12,
                     color: Get.isDarkMode
                         ? Colors.white
-                        : Color.fromRGBO(0, 0, 0, 0.5),
+                        : const Color.fromRGBO(0, 0, 0, 0.5),
                   ),
                 ),
-                Text(
+                const Text(
                   "Today",
                   style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
                 )
@@ -346,8 +356,8 @@ class _HomePageState extends State<HomePage> {
     return Container(
       margin: const EdgeInsets.only(top: 20, left: 15, right: 15),
       child: Container(
-        padding: EdgeInsets.all(10.0),
-        decoration: BoxDecoration(
+        padding: const EdgeInsets.all(10.0),
+        decoration: const BoxDecoration(
             color: Color.fromRGBO(78, 91, 232, 0.06),
             borderRadius: BorderRadius.all(Radius.circular(20))),
         child: DatePicker(
@@ -391,7 +401,7 @@ class _HomePageState extends State<HomePage> {
               const CircleAvatar(
                 backgroundImage: AssetImage("images/profile.png"),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               Text(
@@ -417,19 +427,19 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Container(
                   child: Container(
-                    margin:
-                        EdgeInsets.only(top: 15, bottom: 5, right: 10, left: 9),
+                    margin: const EdgeInsets.only(
+                        top: 15, bottom: 5, right: 10, left: 9),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(100),
                       color: Get.isDarkMode
                           ? Colors.grey[600]
-                          : Color.fromRGBO(255, 124, 50, 1),
+                          : const Color.fromRGBO(255, 124, 50, 1),
                     ),
                     width: 70,
                   ),
                 ),
                 AnimatedPositioned(
-                  duration: Duration(seconds: 1),
+                  duration: const Duration(seconds: 1),
                   left: left,
                   top: 20,
                   child: Icon(

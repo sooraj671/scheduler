@@ -34,6 +34,7 @@ List<String> repeatList = [
 ];
 
 List<int> alertList = [1, 3, 5, 8];
+List<int> multiplealertList = [];
 
 class AddTaskPage extends StatefulWidget {
   const AddTaskPage({Key? key}) : super(key: key);
@@ -302,14 +303,17 @@ class _AddTaskPageState extends State<AddTaskPage> {
                       fullDate =
                           DateTimeField.combine(_selectedDate, selectedcustime);
 
-                      fullDate =
-                          fullDate.subtract(Duration(minutes: alertbefore));
+                      for (var i = 0; i < multiplealertList.length; i++) {
+                        print(multiplealertList[i]);
+                        fullDate = fullDate
+                            .subtract(Duration(minutes: multiplealertList[i]));
+                        await _notificationService.scheduleNotifications(
+                            id: 2,
+                            title: _titleController.text,
+                            body: "Body",
+                            time: fullDate);
+                      }
 
-                      await _notificationService.scheduleNotifications(
-                          id: 2,
-                          title: _titleController.text,
-                          body: "Body",
-                          time: fullDate);
                       if (_titleController.text.isNotEmpty) {
                         _addTaskToDb();
                         Get.back();
@@ -450,6 +454,10 @@ class _alerttimeselectState extends State<alerttimeselect> {
           return InkWell(
             onTap: () {
               setState(() {
+                multiplealertList.contains(alertList[index])
+                    ? multiplealertList.remove(alertList[index])
+                    : multiplealertList.add(alertList[index]);
+
                 selectedalertIndex = index;
                 alertbefore = alertList[selectedalertIndex];
                 print(alertbefore);
@@ -458,12 +466,15 @@ class _alerttimeselectState extends State<alerttimeselect> {
             child: Container(
               margin: const EdgeInsets.only(right: 10),
               child: AppButton(
-                color: selectedalertIndex == index
+                color: multiplealertList.contains(alertList[index])
                     ? Colors.white
-                    : Get.isDarkMode
-                        ? Colors.white
-                        : Colors.black,
-                backgroundColor: selectedalertIndex == index
+                    : Colors.black,
+                // color: selectedalertIndex == index
+                //     ? Colors.white
+                //     : Get.isDarkMode
+                //         ? Colors.white
+                //         : Colors.black,
+                backgroundColor: multiplealertList.contains(alertList[index])
                     ? primaryClr
                     : Colors.transparent,
                 size: 50,
