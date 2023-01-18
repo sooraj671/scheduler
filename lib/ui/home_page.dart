@@ -111,7 +111,7 @@ class _HomePageState extends State<HomePage> {
               top: 4,
             ),
             height: MediaQuery.of(context).size.height * 0.24,
-            color: Colors.transparent,
+            color: Get.isDarkMode ? darkGreyClr : Colors.transparent,
             child: Column(
               children: [
                 const Spacer(),

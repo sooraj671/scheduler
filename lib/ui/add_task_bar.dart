@@ -304,13 +304,15 @@ class _AddTaskPageState extends State<AddTaskPage> {
                           DateTimeField.combine(_selectedDate, selectedcustime);
 
                       for (var i = 0; i < multiplealertList.length; i++) {
-                        print(multiplealertList[i]);
-                        fullDate = fullDate
-                            .subtract(Duration(minutes: multiplealertList[i]));
+                        setState(() {
+                          fullDate = fullDate.subtract(
+                              Duration(minutes: multiplealertList[i]));
+                        });
+                        print("my current fulldate is -> ${fullDate}");
                         await _notificationService.scheduleNotifications(
-                            id: 2,
+                            id: i,
                             title: _titleController.text,
-                            body: "Body",
+                            body: null,
                             time: fullDate);
                       }
 
