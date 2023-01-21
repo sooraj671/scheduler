@@ -26,6 +26,8 @@ int customcolor = 0;
 int selectedalertIndex = -1;
 int _selectedColor = 0;
 String _selectedRepeat = "None";
+List<int> selectedweek = [];
+
 List<String> repeatList = [
   "None",
   "Daily",
@@ -36,6 +38,13 @@ List<String> repeatList = [
 List<String> weelcheck = [];
 List<int> alertList = [1, 3, 5, 8];
 List<int> multiplealertList = [];
+int monday = 0;
+int tuesday = 0;
+int wednesday = 0;
+int thursday = 0;
+int friday = 0;
+int saturday = 0;
+int sunday = 0;
 
 class AddTaskPage extends StatefulWidget {
   const AddTaskPage({Key? key}) : super(key: key);
@@ -301,6 +310,41 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     width: 350,
                     label: "Create Task",
                     onTap: () async {
+                      if (selectedweek.contains(0)) {
+                        setState(() {
+                          sunday = 1;
+                        });
+                      }
+                      if (selectedweek.contains(1)) {
+                        setState(() {
+                          monday = 1;
+                        });
+                      }
+                      if (selectedweek.contains(2)) {
+                        setState(() {
+                          tuesday = 1;
+                        });
+                      }
+                      if (selectedweek.contains(3)) {
+                        setState(() {
+                          wednesday = 1;
+                        });
+                      }
+                      if (selectedweek.contains(4)) {
+                        setState(() {
+                          thursday = 1;
+                        });
+                      }
+                      if (selectedweek.contains(5)) {
+                        setState(() {
+                          friday = 1;
+                        });
+                      }
+                      if (selectedweek.contains(6)) {
+                        setState(() {
+                          saturday = 1;
+                        });
+                      }
                       fullDate =
                           DateTimeField.combine(_selectedDate, selectedcustime);
 
@@ -351,6 +395,13 @@ class _AddTaskPageState extends State<AddTaskPage> {
       repeat: _selectedRepeat,
       color: _selectedColor,
       isCompleted: 0,
+      monday: monday,
+      tuesday: tuesday,
+      wednesday: wednesday,
+      thursday: thursday,
+      friday: friday,
+      saturday: saturday,
+      sunday: sunday,
       // dyz: weelcheck,
     ));
     print("My id is " + "$value");
@@ -534,9 +585,7 @@ class _howOftenState extends State<howOften> {
                               ? setState(() {
                                   _selectedRepeat = "Monthly";
                                 })
-                              : setState(() {
-                                  _selectedRepeat = "None";
-                                });
+                              : _selectedRepeat = "None";
                 });
               },
               child: Container(
@@ -728,8 +777,6 @@ List<String> weekList = [
 // ];
 
 class _weelSelectState extends State<weelSelect> {
-  List<int> selectedweek = [];
-
   @override
   Widget build(BuildContext context) {
     return Wrap(
