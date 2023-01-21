@@ -523,12 +523,20 @@ class _howOftenState extends State<howOften> {
                 setState(() {
                   selectedweekIndex = index;
                   index == 1
-                      ? _selectedRepeat = "Daily"
+                      ? setState(() {
+                          _selectedRepeat = "Daily";
+                        })
                       : index == 2
-                          ? _selectedRepeat = "Weekly"
+                          ? setState(() {
+                              _selectedRepeat = "Weekly";
+                            })
                           : index == 3
-                              ? _selectedRepeat = "Monthly"
-                              : _selectedRepeat = "None";
+                              ? setState(() {
+                                  _selectedRepeat = "Monthly";
+                                })
+                              : setState(() {
+                                  _selectedRepeat = "None";
+                                });
                 });
               },
               child: Container(
