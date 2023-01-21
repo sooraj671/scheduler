@@ -9,7 +9,7 @@ class Task {
   int? color;
   int? remind;
   String? repeat;
-
+  // List<String>? dyz;
 
   Task({
     this.id,
@@ -22,6 +22,7 @@ class Task {
     this.color,
     this.remind,
     this.repeat,
+    // this.dyz,
   });
 
   Task.fromJson(Map<String, dynamic> json) {
@@ -35,10 +36,11 @@ class Task {
     color = json['color'];
     remind = json['remind'];
     repeat = json['repeat'];
+    // dyz = json['dyz'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =new Map<String, dynamic>();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['title'] = this.title;
     data['date'] = this.date;
@@ -49,10 +51,8 @@ class Task {
     data['color'] = this.color;
     data['remind'] = this.remind;
     data['repeat'] = this.repeat;
+    // data['dyz'] = this.dyz;
+
     return data;
   }
-
 }
-
-
-

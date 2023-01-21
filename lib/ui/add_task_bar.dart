@@ -7,13 +7,14 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:scheduler/controllers/task_controller.dart';
+import 'package:scheduler/services/notification_services.dart';
 import 'package:scheduler/ui/theme.dart';
 import 'package:scheduler/ui/widgets/button.dart';
 import 'package:scheduler/ui/widgets/input_field.dart';
+import 'package:number_to_words/number_to_words.dart';
 import 'package:scheduler/ui/widgets/input_notes.dart';
 import '../models/task.dart';
 import 'package:datetime_picker_formfield_new/datetime_picker_formfield_new.dart';
-import 'package:scheduler/ui/notification_handler.dart';
 
 var selectedcustime;
 int alertbefore = 0;
@@ -32,7 +33,7 @@ List<String> repeatList = [
   "Monthly",
   "Yearly",
 ];
-
+List<String> weelcheck = [];
 List<int> alertList = [1, 3, 5, 8];
 List<int> multiplealertList = [];
 
@@ -350,6 +351,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       repeat: _selectedRepeat,
       color: _selectedColor,
       isCompleted: 0,
+      // dyz: weelcheck,
     ));
     print("My id is " + "$value");
   }
@@ -557,7 +559,13 @@ class _howOftenState extends State<howOften> {
                 ),
                 child: Row(
                   children: [
-                    Text("In Every ${weekcounter.toString()} weeks"),
+                    Row(
+                      children: [
+                        Text("In Every "),
+                        Text(NumberToWord().convert('en-in', weekcounter)),
+                        Text("Week"),
+                      ],
+                    ),
                     const Spacer(),
                     Container(
                       height: 35,
@@ -619,7 +627,13 @@ class _howOftenState extends State<howOften> {
                     ),
                     child: Row(
                       children: [
-                        Text("In Every ${monthcounter.toString()} Month"),
+                        Row(
+                          children: [
+                            Text("In Every "),
+                            Text(NumberToWord().convert('en-in', monthcounter)),
+                            Text("Month"),
+                          ],
+                        ),
                         const Spacer(),
                         Container(
                           height: 35,
@@ -695,9 +709,18 @@ List<String> weekList = [
   "Fri",
   "Sat",
 ];
+// List<String> fullweekList = [
+//   "Sunday",
+//   "Monday",
+//   "Tuesday",
+//   "Wednesday",
+//   "Thursday",
+//   "Friday",
+//   "Saturday",
+// ];
 
 class _weelSelectState extends State<weelSelect> {
-  List<int> selectedIndex = [];
+  List<int> selectedweek = [];
 
   @override
   Widget build(BuildContext context) {
@@ -706,20 +729,21 @@ class _weelSelectState extends State<weelSelect> {
         return InkWell(
           child: Container(
             margin: const EdgeInsets.only(right: 10),
-            child: selectedIndex.contains(index)
+            child: selectedweek.contains(index)
                 ? InkWell(
                     onTap: () {
                       setState(() {
-                        selectedIndex.remove(index);
+                        selectedweek.remove(index);
+                        // weelcheck.remove(fullweekList[index]);
                       });
                     },
                     child: SmallAppButton(
-                      color: selectedIndex.contains(index)
+                      color: selectedweek.contains(index)
                           ? Colors.white
                           : Get.isDarkMode
                               ? Colors.white
                               : Colors.black,
-                      backgroundColor: selectedIndex.contains(index)
+                      backgroundColor: selectedweek.contains(index)
                           ? primaryClr
                           : Colors.transparent,
                       size: 34,
@@ -729,16 +753,17 @@ class _weelSelectState extends State<weelSelect> {
                 : InkWell(
                     onTap: () {
                       setState(() {
-                        selectedIndex.add(index);
+                        selectedweek.add(index);
+                        // weelcheck.add(fullweekList[index]);
                       });
                     },
                     child: SmallAppButton(
-                      color: selectedIndex.contains(index)
+                      color: selectedweek.contains(index)
                           ? Colors.white
                           : Get.isDarkMode
                               ? Colors.white
                               : Colors.black,
-                      backgroundColor: selectedIndex.contains(index)
+                      backgroundColor: selectedweek.contains(index)
                           ? primaryClr
                           : Colors.transparent,
                       size: 34,

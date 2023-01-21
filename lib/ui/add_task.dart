@@ -12,8 +12,8 @@ import 'package:scheduler/ui/widgets/button.dart';
 import 'package:scheduler/ui/widgets/input_field.dart';
 import 'package:scheduler/ui/widgets/input_notes.dart';
 import '../models/task.dart';
+import 'package:scheduler/services/notification_services.dart';
 import 'package:datetime_picker_formfield_new/datetime_picker_formfield_new.dart';
-import 'package:scheduler/ui/notification_handler.dart';
 
 var selectedcustime;
 int alertbefore = 0;

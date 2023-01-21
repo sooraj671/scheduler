@@ -254,13 +254,17 @@ class _HomePageState extends State<HomePage> {
                           context: context),
                       _bottomSheetButton(
                           label: "Delete all future tasks",
-                          onTap: () {},
+                          onTap: () {
+                            _taskController.deleteallfuture(task);
+                          },
                           clr: const Color.fromRGBO(78, 91, 232, 0.06),
                           textcolor: Colors.black,
                           context: context),
                       _bottomSheetButton(
                           label: "Delete all tasks",
-                          onTap: () {},
+                          onTap: () {
+                            _taskController.deleteall();
+                          },
                           clr: const Color.fromRGBO(78, 91, 232, 0.06),
                           textcolor: Colors.black,
                           context: context),
