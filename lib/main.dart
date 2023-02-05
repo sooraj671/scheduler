@@ -7,7 +7,7 @@ import 'package:scheduler/services/notification_services.dart';
 import 'package:scheduler/ui/theme.dart';
 import 'package:scheduler/ui/widgets/dynamicline.dart';
 import 'db/db_helper.dart';
-
+  
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await NotificationService().init(); //
