@@ -3,8 +3,7 @@ import 'package:scheduler/db/db_helper.dart';
 
 import '../models/task.dart';
 
-class TaskController extends GetxController{
-
+class TaskController extends GetxController {
   @override
   void onReady() {
     super.onReady();
@@ -12,7 +11,7 @@ class TaskController extends GetxController{
 
   var taskList = <Task>[].obs;
 
-  Future<int> addTask({Task? task}) async{
+  Future<int> addTask({Task? task}) async {
     return await DBHelper.insert(task);
   }
 
@@ -22,12 +21,32 @@ class TaskController extends GetxController{
     taskList.assignAll(tasks.map((data) => new Task.fromJson(data)).toList());
   }
 
-  void delete(Task task){
+  void delete(Task task) {
     DBHelper.delete(task);
     getTasks();
   }
 
-  void markTaskCompleted(int id)async{
+  void deleteall() {
+    for (var task = 0; task < taskList.length; task++) {
+      DBHelper.delete(taskList[task]);
+    }
+
+    getTasks();
+  }
+
+  void deleteallfuture(Task task) {
+    for (var i = 0; i < taskList.length; i++) {
+      if (taskList[i] == task) {
+        continue;
+      } else {
+        DBHelper.delete(taskList[i]);
+      }
+    }
+
+    getTasks();
+  }
+
+  void markTaskCompleted(int id) async {
     await DBHelper.update(id);
     getTasks();
   }

@@ -9,7 +9,14 @@ class Task {
   int? color;
   int? remind;
   String? repeat;
-
+  int? sunday;
+  int? monday;
+  int? tuesday;
+  int? wednesday;
+  int? thursday;
+  int? friday;
+  int? saturday;
+  // List<String>? dyz;
 
   Task({
     this.id,
@@ -22,6 +29,15 @@ class Task {
     this.color,
     this.remind,
     this.repeat,
+    this.sunday,
+    this.monday,
+    this.tuesday,
+    this.wednesday,
+    this.thursday,
+    this.friday,
+    this.saturday,
+    // List<String>
+    // this.dyz,
   });
 
   Task.fromJson(Map<String, dynamic> json) {
@@ -35,10 +51,19 @@ class Task {
     color = json['color'];
     remind = json['remind'];
     repeat = json['repeat'];
+    monday = json['monday'];
+    tuesday = json['tuesday'];
+    wednesday = json['wednesday'];
+    thursday = json['thursday'];
+    friday = json['friday'];
+    saturday = json['saturday'];
+    sunday = json['sunday'];
+
+    // dyz = json['dyz'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =new Map<String, dynamic>();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['title'] = this.title;
     data['date'] = this.date;
@@ -49,10 +74,15 @@ class Task {
     data['color'] = this.color;
     data['remind'] = this.remind;
     data['repeat'] = this.repeat;
+    data['monday'] = this.monday;
+    data['tuesday'] = this.tuesday;
+    data['wednesday'] = this.wednesday;
+    data['thursday'] = this.thursday;
+    data['friday'] = this.friday;
+    data['saturday'] = this.saturday;
+    data['sunday'] = this.sunday;
+    // data['dyz'] = this.dyz;
+
     return data;
   }
-
 }
-
-
-

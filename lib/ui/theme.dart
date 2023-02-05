@@ -16,62 +16,52 @@ const primaryClr = bluishClr;
 const Color darkGreyClr = Color(0xFF121212);
 const Color darkHeaderClr = Color(0xFF424242);
 
-class Themes {
+Color customtextthemecolor = Colors.black;
 
+class Themes {
   static final light = ThemeData.light().copyWith(
-    appBarTheme:const AppBarTheme(
+    appBarTheme: const AppBarTheme(
       backgroundColor: white,
     ),
     brightness: Brightness.light,
   );
 
-
   static final dark = ThemeData.dark().copyWith(
-    appBarTheme:const AppBarTheme(
+    appBarTheme: const AppBarTheme(
       backgroundColor: darkGreyClr,
     ),
     brightness: Brightness.dark,
   );
 }
 
-TextStyle get subHeadingStyle{
+TextStyle get subHeadingStyle {
   return GoogleFonts.lato(
-    textStyle: TextStyle(
-      fontSize: 18,
-      fontWeight: FontWeight.bold,
-        color: Get.isDarkMode?Colors.grey[400]:Colors.grey
-    )
-  );
+      textStyle: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: Get.isDarkMode ? Colors.grey[400] : Colors.grey));
 }
 
-TextStyle get headingStyle{
+TextStyle get headingStyle {
   return GoogleFonts.lato(
       textStyle: TextStyle(
           fontSize: 23,
           fontWeight: FontWeight.bold,
-          color: Get.isDarkMode?Colors.white:Colors.black
-
-      )
-  );
+          color: Get.isDarkMode ? Colors.white : Colors.black));
 }
 
-TextStyle get titleStyle{
+TextStyle get titleStyle {
+  return GoogleFonts.lato(
+      textStyle: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.bold,
+          color: Get.isDarkMode ? Colors.grey[100] : Colors.grey[600]));
+}
+
+TextStyle get subTitleStyle {
   return GoogleFonts.lato(
       textStyle: TextStyle(
           fontSize: 16,
-          fontWeight: FontWeight.w400,
-          color: Get.isDarkMode?Colors.white:Colors.black
-
-      )
-  );
-}
-
-TextStyle get subTitleStyle{
-  return GoogleFonts.lato(
-      textStyle: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w400,
-          color: Get.isDarkMode? Colors.grey[100]:Colors.grey[600]
-      )
-  );
+          fontWeight: FontWeight.bold,
+          color: Get.isDarkMode ? Colors.white : Colors.black));
 }
