@@ -54,22 +54,126 @@ class _HomePageState extends State<HomePage> {
             itemCount: _taskController.taskList.length,
             itemBuilder: (_, index) {
               Task task = _taskController.taskList[index];
-              print(task.toJson());
               if (task.repeat == 'Daily') {
-                return AnimationConfiguration.staggeredList(
-                    position: index,
-                    child: SlideAnimation(
-                        child: FadeInAnimation(
-                            child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            _showBottomSheet(context, task);
-                          },
-                          child: TaskTile(task),
-                        )
-                      ],
-                    ))));
+                if (task.monday == 1 &&
+                    DateFormat('EEEE').format(_selectedDate) == "Monday") {
+                  return AnimationConfiguration.staggeredList(
+                      position: index,
+                      child: SlideAnimation(
+                          child: FadeInAnimation(
+                              child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              _showBottomSheet(context, task);
+                            },
+                            child: TaskTile(task),
+                          )
+                        ],
+                      ))));
+                }
+                if (task.tuesday == 1 &&
+                    DateFormat('EEEE').format(_selectedDate) == "Tueday") {
+                  return AnimationConfiguration.staggeredList(
+                      position: index,
+                      child: SlideAnimation(
+                          child: FadeInAnimation(
+                              child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              _showBottomSheet(context, task);
+                            },
+                            child: TaskTile(task),
+                          )
+                        ],
+                      ))));
+                }
+                if (task.wednesday == 1 &&
+                    DateFormat('EEEE').format(_selectedDate) == "Wednesday") {
+                  return AnimationConfiguration.staggeredList(
+                      position: index,
+                      child: SlideAnimation(
+                          child: FadeInAnimation(
+                              child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              _showBottomSheet(context, task);
+                            },
+                            child: TaskTile(task),
+                          )
+                        ],
+                      ))));
+                }
+                if (task.thursday == 1 &&
+                    DateFormat('EEEE').format(_selectedDate) == "Thursday") {
+                  return AnimationConfiguration.staggeredList(
+                      position: index,
+                      child: SlideAnimation(
+                          child: FadeInAnimation(
+                              child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              _showBottomSheet(context, task);
+                            },
+                            child: TaskTile(task),
+                          )
+                        ],
+                      ))));
+                }
+                if (task.friday == 1 &&
+                    DateFormat('EEEE').format(_selectedDate) == "Friday") {
+                  return AnimationConfiguration.staggeredList(
+                      position: index,
+                      child: SlideAnimation(
+                          child: FadeInAnimation(
+                              child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              _showBottomSheet(context, task);
+                            },
+                            child: TaskTile(task),
+                          )
+                        ],
+                      ))));
+                }
+                if (task.saturday == 1 &&
+                    DateFormat('EEEE').format(_selectedDate) == "Saturday") {
+                  return AnimationConfiguration.staggeredList(
+                      position: index,
+                      child: SlideAnimation(
+                          child: FadeInAnimation(
+                              child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              _showBottomSheet(context, task);
+                            },
+                            child: TaskTile(task),
+                          )
+                        ],
+                      ))));
+                }
+                if (task.sunday == 1 &&
+                    DateFormat('EEEE').format(_selectedDate) == "Sunday") {
+                  return AnimationConfiguration.staggeredList(
+                      position: index,
+                      child: SlideAnimation(
+                          child: FadeInAnimation(
+                              child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              _showBottomSheet(context, task);
+                            },
+                            child: TaskTile(task),
+                          )
+                        ],
+                      ))));
+                }
               }
               // if (task.repeat == 'Weekly') {
               //   if (task.dyz!
@@ -93,118 +197,6 @@ class _HomePageState extends State<HomePage> {
               print("upar jo select kiya woh ");
               print(DateFormat('EEEE').format(_selectedDate));
 
-              if (DateFormat('EEEE').format(_selectedDate) == "Monday") {
-                return AnimationConfiguration.staggeredList(
-                    position: index,
-                    child: SlideAnimation(
-                        child: FadeInAnimation(
-                            child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            _showBottomSheet(context, task);
-                          },
-                          child: TaskTile(task),
-                        )
-                      ],
-                    ))));
-              } else if (task.tuesday == 1 &&
-                  DateFormat('EEEE').format(_selectedDate) == "Tueday") {
-                return AnimationConfiguration.staggeredList(
-                    position: index,
-                    child: SlideAnimation(
-                        child: FadeInAnimation(
-                            child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            _showBottomSheet(context, task);
-                          },
-                          child: TaskTile(task),
-                        )
-                      ],
-                    ))));
-              } else if (task.wednesday == 1 &&
-                  DateFormat('EEEE').format(_selectedDate) == "Wednesday") {
-                return AnimationConfiguration.staggeredList(
-                    position: index,
-                    child: SlideAnimation(
-                        child: FadeInAnimation(
-                            child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            _showBottomSheet(context, task);
-                          },
-                          child: TaskTile(task),
-                        )
-                      ],
-                    ))));
-              } else if (task.thursday == 1 &&
-                  DateFormat('EEEE').format(_selectedDate) == "Thursday") {
-                return AnimationConfiguration.staggeredList(
-                    position: index,
-                    child: SlideAnimation(
-                        child: FadeInAnimation(
-                            child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            _showBottomSheet(context, task);
-                          },
-                          child: TaskTile(task),
-                        )
-                      ],
-                    ))));
-              } else if (task.friday == 1 &&
-                  DateFormat('EEEE').format(_selectedDate) == "Friday") {
-                return AnimationConfiguration.staggeredList(
-                    position: index,
-                    child: SlideAnimation(
-                        child: FadeInAnimation(
-                            child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            _showBottomSheet(context, task);
-                          },
-                          child: TaskTile(task),
-                        )
-                      ],
-                    ))));
-              } else if (task.saturday == 1 &&
-                  DateFormat('EEEE').format(_selectedDate) == "Saturday") {
-                return AnimationConfiguration.staggeredList(
-                    position: index,
-                    child: SlideAnimation(
-                        child: FadeInAnimation(
-                            child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            _showBottomSheet(context, task);
-                          },
-                          child: TaskTile(task),
-                        )
-                      ],
-                    ))));
-              } else if (task.sunday == 1 &&
-                  DateFormat('EEEE').format(_selectedDate) == "Sunday") {
-                return AnimationConfiguration.staggeredList(
-                    position: index,
-                    child: SlideAnimation(
-                        child: FadeInAnimation(
-                            child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            _showBottomSheet(context, task);
-                          },
-                          child: TaskTile(task),
-                        )
-                      ],
-                    ))));
-              }
               if (task.date == DateFormat.yMd().format(_selectedDate)) {
                 return AnimationConfiguration.staggeredList(
                     position: index,

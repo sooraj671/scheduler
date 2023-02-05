@@ -207,6 +207,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                     height: 40,
                                     width: 10,
                                     child: TextField(
+                                      maxLength: 2,
                                       keyboardType: TextInputType.number,
                                       controller: myController,
                                     ),
@@ -286,18 +287,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   ),
                   child: const howOften(),
                 ),
-                Container(
-                  margin: const EdgeInsets.only(top: 10),
-                  padding: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: const Color.fromRGBO(78, 91, 232, 0.06),
-                  ),
-                  child: const weelSelect(),
-                ),
-                const SizedBox(
-                  height: 8.0,
-                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -375,6 +364,24 @@ class _AddTaskPageState extends State<AddTaskPage> {
                             icon: const Icon(Icons.warning_amber_rounded,
                                 color: Colors.red));
                       }
+                      setState(() {
+                        alertbefore = 0;
+                        selectedcolIndex = -1;
+                        customcolor = 0;
+                        selectedalertIndex = -1;
+                        _selectedColor = 0;
+                        _selectedRepeat = "None";
+                        selectedweek = [];
+                        weelcheck = [];
+                        multiplealertList = [];
+                        monday = 0;
+                        tuesday = 0;
+                        wednesday = 0;
+                        thursday = 0;
+                        friday = 0;
+                        saturday = 0;
+                        sunday = 0;
+                      });
                     }),
                 const SizedBox(height: 10),
               ],
@@ -523,7 +530,9 @@ class _alerttimeselectState extends State<alerttimeselect> {
               child: AppButton(
                 color: multiplealertList.contains(alertList[index])
                     ? Colors.white
-                    : Colors.black,
+                    : Get.isDarkMode
+                        ? Colors.white
+                        : Colors.black,
                 // color: selectedalertIndex == index
                 //     ? Colors.white
                 //     : Get.isDarkMode
@@ -560,8 +569,8 @@ List<String> dayList = [
 class _howOftenState extends State<howOften> {
   int selectedweekIndex = 0;
   int uniq = 1;
-  int weekcounter = 1;
-  int monthcounter = 1;
+  int weekcounter = 2;
+  int monthcounter = 2;
 
   @override
   Widget build(BuildContext context) {
@@ -618,7 +627,7 @@ class _howOftenState extends State<howOften> {
                   children: [
                     Row(
                       children: [
-                        Text("In Every "),
+                        Text("Every "),
                         Text(NumberToWord().convert('en-in', weekcounter)),
                         Text("Week"),
                       ],
@@ -662,7 +671,7 @@ class _howOftenState extends State<howOften> {
                       child: InkWell(
                         onTap: (() {
                           setState(() {
-                            weekcounter == 0 ? weekcounter = 0 : weekcounter--;
+                            weekcounter == 2 ? weekcounter = 2 : weekcounter--;
                           });
                         }),
                         child: const Icon(
@@ -686,7 +695,7 @@ class _howOftenState extends State<howOften> {
                       children: [
                         Row(
                           children: [
-                            Text("In Every "),
+                            Text("Every "),
                             Text(NumberToWord().convert('en-in', monthcounter)),
                             Text("Month"),
                           ],
@@ -730,8 +739,8 @@ class _howOftenState extends State<howOften> {
                           child: InkWell(
                             onTap: (() {
                               setState(() {
-                                monthcounter == 0
-                                    ? monthcounter = 0
+                                monthcounter == 2
+                                    ? monthcounter = 2
                                     : monthcounter--;
                               });
                             }),
@@ -744,7 +753,22 @@ class _howOftenState extends State<howOften> {
                       ],
                     ),
                   )
-                : Container(),
+                : selectedweekIndex == 1
+                    ? Column(children: [
+                        SizedBox(height: 8),
+                        Container(
+                          alignment: Alignment.center,
+                          height: 50,
+                          // margin: const EdgeInsets.only(top: 10),
+                          // padding: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: const Color.fromRGBO(78, 91, 232, 0.06),
+                          ),
+                          child: const weelSelect(),
+                        ),
+                      ])
+                    : Container()
       ],
     );
   }
@@ -789,7 +813,6 @@ class _weelSelectState extends State<weelSelect> {
                     onTap: () {
                       setState(() {
                         selectedweek.remove(index);
-                        // weelcheck.remove(fullweekList[index]);
                       });
                     },
                     child: SmallAppButton(
@@ -809,7 +832,6 @@ class _weelSelectState extends State<weelSelect> {
                     onTap: () {
                       setState(() {
                         selectedweek.add(index);
-                        // weelcheck.add(fullweekList[index]);
                       });
                     },
                     child: SmallAppButton(
@@ -832,11 +854,11 @@ class _weelSelectState extends State<weelSelect> {
   }
 }
 
-class colorRow extends StatefulWidget {
-  const colorRow({super.key});
+class colorPallete extends StatefulWidget {
+  const colorPallete({super.key});
 
   @override
-  State<colorRow> createState() => _colorRowState();
+  State<colorPallete> createState() => _colorPalleteState();
 }
 
 List<Color> colorList = [
@@ -846,41 +868,6 @@ List<Color> colorList = [
   yellowClr,
   greenClr,
 ];
-
-class _colorRowState extends State<colorRow> {
-  @override
-  Widget build(BuildContext context) {
-    return Wrap(
-      children: List.generate(5, (index) {
-        return InkWell(
-          onTap: () {
-            setState(() {
-              _selectedColor = (index);
-
-              selectedcolIndex = index;
-              customcolor = 0;
-              addtaskcol = colorList[selectedcolIndex];
-            });
-          },
-          child: Container(
-            margin: const EdgeInsets.only(right: 10),
-            child: selectedcolIndex == index
-                ? UnColorButton(
-                    color: colorList[index], backgroundColor: primaryClr)
-                : ColorButton(color: colorList[index]),
-          ),
-        );
-      }),
-    );
-  }
-}
-
-class colorPallete extends StatefulWidget {
-  const colorPallete({super.key});
-
-  @override
-  State<colorPallete> createState() => _colorPalleteState();
-}
 
 class _colorPalleteState extends State<colorPallete> {
   @override
@@ -903,7 +890,28 @@ class _colorPalleteState extends State<colorPallete> {
         ),
         Row(
           children: [
-            colorRow(),
+            Wrap(
+              children: List.generate(5, (index) {
+                return InkWell(
+                  onTap: () {
+                    setState(() {
+                      customcolor = -1;
+                      _selectedColor = (index);
+                      selectedcolIndex = index;
+                      addtaskcol = colorList[selectedcolIndex];
+                    });
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(right: 10),
+                    child: selectedcolIndex == index
+                        ? UnColorButton(
+                            color: colorList[index],
+                            backgroundColor: primaryClr)
+                        : ColorButton(color: colorList[index]),
+                  ),
+                );
+              }),
+            ),
             customcolor == 1
                 ? Container(
                     height: 40,
@@ -965,7 +973,6 @@ class _colorPalleteState extends State<colorPallete> {
                               onSelect: (Color newColor) {
                                 setState(() {
                                   _selectedColor = 5;
-
                                   customcolor = 1;
                                   selectedCol = newColor;
                                   addtaskcol = newColor;
